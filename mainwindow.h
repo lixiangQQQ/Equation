@@ -1,7 +1,10 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "custom.h"
+
+#pragma execution_character_set("utf-8")
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Custom *custom;
 };
 
 #endif // MAINWINDOW_H

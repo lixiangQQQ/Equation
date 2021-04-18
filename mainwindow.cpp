@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    custom = new Custom(this);
+    setCentralWidget(custom);
+    custom->show();
+    setMinimumSize(1030,391);
 }
 
 MainWindow::~MainWindow()

@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        custom.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
+        custom.h \
         mainwindow.h
 
 FORMS += \

@@ -18,8 +18,19 @@ private:
 
     QTableWidget* tableWidget;
     QPushButton* calculationBtn;
+
+    int a[10][10];//增广矩阵
+    int initArr();
+    int x[10];//解集
+    bool free_x[10];//标记是否是不确定的变元
+
+    int gcd(int a,int b);
+    int lcm(int a,int b);
+    int Gauss(int equ,int var);
+
 public slots:
     int calculation();
+    void tableItemChanged(QTableWidgetItem * item);
 };
 
 #endif // CUSTOM_H

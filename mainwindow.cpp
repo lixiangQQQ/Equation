@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("计算");
     custom = new Custom(this);
     setCentralWidget(custom);
     custom->show();

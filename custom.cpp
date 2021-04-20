@@ -2,10 +2,11 @@
 #include<QtWidgets>
 #include<qdebug.h>
 #include<math.h>
+#include <armadillo>
 
 Custom::Custom( QWidget * parent)
 {
-    initArr();
+    //initArr();
     initTableWidget();
 
     calculationBtn = new QPushButton(QStringLiteral("重新计算"),this);
@@ -14,6 +15,9 @@ Custom::Custom( QWidget * parent)
     Vlayout->addWidget(calculationBtn);
     Vlayout->addWidget(tableWidget);
     setLayout(Vlayout);
+
+    QString str = QString::fromStdString(arma::arma_version::as_string());
+    qDebug()<<str;
 
 }
 
@@ -42,18 +46,88 @@ void Custom::initTableWidget(){
     }
 
     tableWidget->setItem(tableWidget->rowCount()-1,tableWidget->columnCount()-1,new QTableWidgetItem("1000"));
-
     tableWidget->show();
-
     connect(tableWidget,&QTableWidget::itemChanged,this,&Custom::tableItemChanged);
 
 }
 
 int Custom::calculation(){
 
+    arma::mat A1(4,3,arma::fill::zeros);
+    arma::vec B1(4,arma::fill::zeros);
+    arma::vec X1;
+
+    A1 = {
+            {5,4,-4},
+            {-4,-3,5},
+            {-1,-1,-1},
+            {-8,-7,1}
+         };
+    B1 = {4,-5,1,-1};
+    solve(X1, A1, B1);
+    A1.print("A1:");
+    B1.print("B1:");
+    X1.print("X1:");
+
+    return 0;
+
     qDebug()<<QStringLiteral("点击重新计算按钮");
 
-    int a1[10] = {0};
+
+    arma::mat A(tableWidget->columnCount()-1,tableWidget->rowCount()-1,arma::fill::zeros);
+    arma::vec B(tableWidget->columnCount()-1,arma::fill::zeros);
+    arma::vec X(tableWidget->rowCount()-1,arma::fill::zeros);
+
+    for( int i = 0 ; i < tableWidget->columnCount()-1; i ++){ //按列顺序优先遍历
+
+        for( int j = 0 ; j < tableWidget->rowCount()-1 ;j++){
+
+            if(tableWidget->item(j,i)!=nullptr){
+
+
+                QString str = tableWidget->item(j,i)->text();
+                double w = str.toDouble();
+                A(i,j) = w;
+
+            }
+
+        }
+
+    }
+
+    double a1[10] = {0};
+
+    for(int i = 0 ;  i < tableWidget->columnCount()-1; i++){
+
+        if(tableWidget->item(tableWidget->rowCount()-1,i)!=nullptr){
+
+            QString str = tableWidget->item(tableWidget->rowCount()-1,i)->text();
+            double w = str.toDouble();
+            B[i] = 1000*w;
+
+        }
+
+    }
+
+    bool status = solve(X, A, B);
+    A.print("A:");
+    B.print("B:");
+    if( status ){
+
+        for(int i = 0 ; i < tableWidget->columnCount()-1;i++){
+            qDebug()<<X[i];
+        }
+
+
+    }else{
+        QMessageBox::information(NULL, QStringLiteral("提示"), QStringLiteral("无解"),
+                                 QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+
+
+
+
+    /*int a1[10] = {0};
 
     for(int i = 0 ;  i < tableWidget->columnCount()-1; i++){
 
@@ -146,7 +220,7 @@ int Custom::calculation(){
         {
             printf("x%d: %d\n", i + 1, x[i]);
         }
-    }
+    }*/
 
     return -1;
 }

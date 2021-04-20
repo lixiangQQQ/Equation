@@ -40,3 +40,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32: LIBS += -L$$PWD/armadillo/lib_win64/ -llibopenblas
+
+INCLUDEPATH += $$PWD/armadillo/include
+DEPENDPATH += $$PWD/armadillo/include
